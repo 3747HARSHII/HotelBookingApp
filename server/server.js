@@ -1,23 +1,24 @@
-// basic express servere creation.
+// basic express server creation.
 
 import express from "express";
-import "dotenv/config";
+import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./configs/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import clerkWebhooks from "./controllers/clerkWebhooks.js";
 
+// Load environment variables
+dotenv.config();
+
+// Connect to the database
 connectDB();
 
 const app = express();
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-
-//middleware
+app.use(cors());
 app.use(express.json());
 app.use(clerkMiddleware());
 
-//API to listen Clerk Webhooks
-
+// API to listen Clerk Webhooks
 app.use("/api/clerk", clerkWebhooks);
 
 app.get("/", (req, res) => res.send("API is working FINE."));
